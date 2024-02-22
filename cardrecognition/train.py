@@ -1,16 +1,13 @@
-import os
-import numpy as np
-import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras.layers import Dense, GlobalAveragePooling2D
 from tensorflow.keras.models import Model
 
-train_dir = 'C:/Users/user/Desktop/pkm-site/files/images'
-validation_dir = 'C:/Users/user/Desktop/pkm-site/files/images'
+train_dir = 'C:/Users/user/Desktop/POKEMON_PROJECT/data&model/pkm-data/files/images'
+validation_dir = 'C:/Users/user/Desktop/POKEMON_PROJECT/data&model/pkm-data/files/images'
 
 img_width, img_height = 224, 224
-batch_size = 32
+batch_size = 16
 
 train_datagen = ImageDataGenerator(
     rescale=1./255,
@@ -60,4 +57,4 @@ history = model.fit(
     validation_steps=validation_generator.samples // batch_size)
 
 # Save the model
-model.save('pokemon_card_recognition_model.h5')
+model.save('pokemon_card_recognition_model_16.keras')

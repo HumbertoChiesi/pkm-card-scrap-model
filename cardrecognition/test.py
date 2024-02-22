@@ -3,9 +3,9 @@ import os
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 
-model = load_model('pokemon_card_recognition_model.h5')
+model = load_model('pokemon_card_recognition_model_16.keras')
 
-image_path = 'C:/Users/user/Downloads/image.webp'
+image_path = 'C:/Users/user/Downloads/image.jpg'
 
 img = image.load_img(image_path, target_size=(224, 224))
 img_array = image.img_to_array(img)
@@ -15,7 +15,7 @@ img_array = img_array / 255.
 
 predictions = model.predict(img_array)
 
-class_indices = {i: folder for i, folder in enumerate(os.listdir('C:/Users/user/Desktop/pkm-site/files/images'))}
+class_indices = {i: folder for i, folder in enumerate(os.listdir('C:/Users/user/Desktop/POKEMON_PROJECT/data&model/pkm-data/files/images'))}
 
 top_k = 5
 top_indices = np.argsort(predictions[0])[::-1][:top_k]

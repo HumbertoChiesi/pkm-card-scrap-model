@@ -1,7 +1,10 @@
+import asyncio
 import os
+import pathlib
 from typing import List
 from dataclasses import dataclass
-import requests
+
+import aiohttp
 
 import urllib.parse
 from pokemontcgsdk import Set
@@ -20,7 +23,7 @@ class CardsImageDownloader:
        A class for downloading Pokemon trading card images from eBay.
 
        Attributes:
-           saving_directory (str): Directory where the downloaded images will be saved.
+           base_directory (str): Directory where the downloaded images will be saved.
            ebay_scraper (EbayScraper): Instance of the EbayScraper class used for scraping eBay.
            MAX_RELATED_SALES (int): The maximum number of related sales to download.
     """
@@ -36,7 +39,11 @@ class CardsImageDownloader:
         return query
 
     def _get_set_info(self, set_id: str) -> PokeSet:
-        set_info = Set.find(set_id)
+        try:
+            set_info = Set.find(set_id)
+        except Exception:
+            raise ValueError(f"Could not find set: {set_id}")
+
         poke_set = PokeSet(
             set_printed_total=set_info.printedTotal,
             set_year_released=set_info.releaseDate[0:4]
@@ -70,21 +77,33 @@ class CardsImageDownloader:
         return related_sales[
                :(self.MAX_RELATED_SALES if (len(related_sales) > self.MAX_RELATED_SALES >= 0) else len(related_sales))]
 
-    def download_card_images(self, card_name: str, card_id: str, poke_set: PokeSet):
+    async def _download_image(self, session: aiohttp.ClientSession, image_url: str, file_path: str) -> None:
+        async with session.get(image_url) as response:
+            if response.status != 200:
+                return None
+            with open(file_path, 'wb') as file:
+                file.write(await response.read())
+
+    async def _iterate_images(self, images_url: List[str], card_id: str, image_path: pathlib.Path) -> None:
+        tasks = []
+        async with aiohttp.ClientSession() as session:
+            for index, image_url in enumerate(images_url):
+                file_path = os.path.join(image_path, f"{card_id}_{index + 1}.jpg")
+                tasks.append(self._download_image(session, image_url, file_path))
+            await asyncio.gather(*tasks)
+
+    async def download_card_images(self, card_name: str, card_id: str, poke_set: PokeSet) -> None:
         images_url = self._get_sales_images(card_name, card_id, poke_set)
 
         image_path = self.base_directory + f"/{card_id}"
         os.makedirs(image_path, exist_ok=True)
 
-        for index, image_url in enumerate(images_url):
-            response = requests.get(image_url)
-            file_path = os.path.join(image_path, f"{card_id}_{index + 1}.jpg")
-            with open(file_path, 'wb') as file:
-                file.write(response.content)
+        await self._iterate_images(images_url, card_id, pathlib.Path(image_path))
 
-    def download_by_set(self, set_id: str):
+    async def download_by_set(self, set_id: str) -> None:
         poke_set = self._get_set_info(set_id)
+        print(poke_set)
         set_cards_df = CardsInfo.get_by_sets([set_id], ['name', 'id'])
 
         for index, row in set_cards_df.iterrows():
-            self.download_card_images(row['name'], row['id'], poke_set)
+            await self.download_card_images(row['name'], row['id'], poke_set)
