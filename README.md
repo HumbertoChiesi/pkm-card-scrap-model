@@ -1,4 +1,4 @@
-# Pokemon Cards Images Recognization
+# Pokemon Cards Images Recognition
 
 ## Simple initial description:
 
