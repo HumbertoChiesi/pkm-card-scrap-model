@@ -1,6 +1,6 @@
 from ultralytics import YOLO
 
-model = YOLO('C:/Users/user/Desktop/POKEMON_PROJECT/data&model/pkm-data/runs/detect/train8/weights/best.pt')
+model = YOLO('C:/Users/user/Desktop/POKEMON_PROJECT/data&model/pkm-data/runs/detect/train8/weights/best.onnx')
 
 # Run batched inference on a list of images
 results = model(['C:/Users/user/Desktop/POKEMON_PROJECT/data&model/pkm-data/files/test_images/img.jpg'], conf=0.93)
@@ -15,4 +15,4 @@ for result in results:
 
     probs = result.probs  # Probs object for classification outputs
     result.show()  # display to screen
-    result.save(filename='result_08.jpg')  # save to disk
+    result.save(filename='../images/result_08.jpg')  # save to disk
