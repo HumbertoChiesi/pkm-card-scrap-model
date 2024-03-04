@@ -31,7 +31,7 @@ class CardsInfo:
 
         :param cards: list of pokemontcgsdk Card object
         :param df: Dataframe of cards info
-        :param cards_properties: list of properties of the pokemontcgsdk Card object
+        :param cards_properties: list of wanted properties of the pokemontcgsdk Card object
         :return: Dataframe of cards info
         """
         data = {prop: [CardsInfo._recursive_getattr(card, prop) for card in cards] for prop in cards_properties}
@@ -43,7 +43,7 @@ class CardsInfo:
         """
         Get cards info (defined in the cards_properties param) from all pokemon TCG collections
 
-        :param cards_properties: list of properties of the pokemontcgsdk Card object
+        :param cards_properties: list of wanted properties of the pokemontcgsdk Card object
         :return: Dataframe with all the cards info (cards_properties) from all pokemon TCG collections
         """
         df_all_collections_cards = pd.DataFrame()
@@ -57,7 +57,7 @@ class CardsInfo:
         (list_collections_id)
 
         :param list_collections_id: list of ids of pokemon TCG collections
-        :param cards_properties: list of properties of the pokemontcgsdk Card object
+        :param cards_properties: list of wanted properties of the pokemontcgsdk Card object
         :return: Dataframe with all the cards info (cards_properties) from the pokemon TCG collections specified
         (list_collections_id)
         """
