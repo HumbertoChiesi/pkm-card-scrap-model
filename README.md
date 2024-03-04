@@ -9,4 +9,4 @@ Also training a model to detect many pokemon cards in an image, and then after d
 # Not finished yet
   🔨🚧🔨🚧🔨🚧🔨
 
-![teste](https://i.imgur.com/24DWoHu.png)
+![teste](https://i.imgur.com/24DWoHu.png)  ![teste](https://i.imgur.com/zXcihpS.png)
