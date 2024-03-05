@@ -1,13 +1,14 @@
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.applications import MobileNetV2
+from tensorflow.keras.applications import ResNet50
 from tensorflow.keras.layers import Dense, GlobalAveragePooling2D
 from tensorflow.keras.models import Model
+from tensorflow.keras.optimizers import Adam
 
 train_dir = 'C:/Users/user/Desktop/POKEMON_PROJECT/data&model/pkm-data/files/images'
 validation_dir = 'C:/Users/user/Desktop/POKEMON_PROJECT/data&model/pkm-data/files/images'
 
 img_width, img_height = 224, 224
-batch_size = 16
+batch_size = 64
 
 train_datagen = ImageDataGenerator(
     rescale=1./255,
@@ -33,7 +34,7 @@ validation_generator = validation_datagen.flow_from_directory(
     batch_size=batch_size,
     class_mode='categorical')
 
-base_model = MobileNetV2(weights='imagenet', include_top=False)
+base_model = ResNet50(weights='imagenet', include_top=False)
 
 x = base_model.output
 x = GlobalAveragePooling2D()(x)
@@ -45,16 +46,16 @@ model = Model(inputs=base_model.input, outputs=predictions)
 for layer in base_model.layers:
     layer.trainable = False
 
-model.compile(optimizer='adam',
+model.compile(optimizer=Adam(),
               loss='categorical_crossentropy',
               metrics=['accuracy'])
 
 history = model.fit(
     train_generator,
     steps_per_epoch=train_generator.samples // batch_size,
-    epochs=10,
+    epochs=20,
     validation_data=validation_generator,
     validation_steps=validation_generator.samples // batch_size)
 
 # Save the model
-model.save('pokemon_card_recognition_model_16.keras')
+model.save('pokemon_card_recognition_model_resnet50.keras')
