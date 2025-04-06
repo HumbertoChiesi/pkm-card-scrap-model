@@ -11,4 +11,4 @@ Also training a model to detect many pokemon cards in an image, and then after d
 
   Cards detection and recognition results:
 
-![teste](images/base_binder.jpg)  ![teste](images/output.jpg)
+![teste](images/base_binder.jpg)  ![teste](images/output_image.jpg)
