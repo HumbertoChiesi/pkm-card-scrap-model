@@ -9,4 +9,6 @@ Also training a model to detect many pokemon cards in an image, and then after d
 # Not finished yet
   🔨🚧🔨🚧🔨🚧🔨
 
-![teste](images/mewtwo_pred_test.PNG)  ![teste](images/result_08.jpg)
+  Cards detection and recognition results:
+
+![teste](images/base_binder.jpg)  ![teste](images/output.jpg)
