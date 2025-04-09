@@ -2,9 +2,9 @@
 
 ## Simple initial description:
 
-Scrap pokemon images from ebay, and with those images train a model that given an image recognize which pokemon card it is (one card per image).
+Scraped Pokémon card images from eBay to build a dataset for training a computer vision model capable of identifying which specific card is shown in a single-image input (one card per image).
 
-Also training a model to detect many pokemon cards in an image, and then after detecting, recognize each card using the other trained model.
+Additionally, developed a second model for multi-card detection, allowing the system to detect multiple Pokémon cards in a single image. Each detected card is then classified using the first model.
 
 # Not finished yet
   🔨🚧🔨🚧🔨🚧🔨
